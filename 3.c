@@ -1,60 +1,43 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
 
+int main()
+{
+    int n, w, i, j, lost;
 
-
-int main(){
-    int n, window, lost, base, end, i;
-    int recovered = 0 ;
-
-    printf("Enter Frame size :");
+    printf("Enter the number of frames: ");
     scanf("%d", &n);
-    printf("Enter window size :");
-    scanf("%d", &window);
-    printf("Enter lost data :");
-    scanf("%d", &lost);
 
+    printf("Enter the window size: ");
+    scanf("%d", &w);
 
-    base =1;
+    for(i = 0; i < n; i += w)
+    {
+        printf("\nSending frames: ");
 
-    while(base <n){
-        end = base+window -1;
+        for(j = i; j < i + w && j < n; j++)
+            printf("%d ", j);
 
-        if(end >n){
-            end = n;
+        printf("\nEnter lost frame (-1 if no loss): ");
+        scanf("%d", &lost);
+
+        if(lost == -1)
+        {
+            printf("ACK received for all frames.\n");
         }
+        else
+        {
+            printf("Frame %d is lost.\n", lost);
 
-        printf("\n. Sending Window ");
-        for(i=0; i<end; i++){
-            printf("%d ", i);
+            printf("Retransmitting frames: ");
+
+            for(j = lost; j < i + w && j < n; j++)
+                printf("%d ", j);
+
+            printf("\nACK received.\n");
         }
-
-        printf("\n");
-
-        for(i=0;i<end;i++){
-            if(i==lost && !recovered){
-                printf("Frame %d lost!\n", i);
-                printf("Going back...\nRetransmitting...\n");
-                
-
-                for(int j=i; j<=end; j++){
-                    printf("%d ", j);
-                }
-                printf("\n");
-
-                recovered = 1;
-            }
-            else{
-                printf("Frame %d recieved\n", i);
-            }
-        }
-
-        printf("ACK Recieved for window\n");
-        base = end+1;
     }
 
     printf("\nAll frames transmitted successfully.\n");
 
-
+    return 0;
 }
